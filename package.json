@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@joyid/core": "^0.0.9",
+    "@legendapp/state": "^0.23.4",
+    "@radix-ui/react-dropdown-menu": "^2.0.4",
     "@svgr/webpack": "5.5.0",
     "@types/node": "18.15.5",
     "@types/react": "18.0.28",
@@ -22,7 +25,7 @@
     "swr": "^2.1.1",
     "tailwind-merge": "^1.10.0",
     "tailwindcss-animate": "^1.0.5",
-    "typescript": "5.0.2"
+    "typescript": "4.9.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

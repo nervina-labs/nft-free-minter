@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 
 export default function Home() {
-  const { data = {} } = useSWR(`GetNFTInfo`, () => {
+  const { data } = useSWR(`GetNFTInfo`, () => {
     return {
       src: '/images/NFT_image.png',
       description:
@@ -21,11 +21,11 @@ export default function Home() {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.svg" />
       </Head>
       <div className="bg-[#fafafa] h-screen flex flex-col justify-start items-center">
         <Header />
-        <main className="w-full max-w-[480px] mt-[32px] bg-white pt-[48px] pb-[32px] px-[32px] rounded-[32px] drop-shadow-md flex flex-col">
+        <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col">
           <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
             Web3 Festival Attendency Proof 🎫
           </h1>
@@ -33,15 +33,15 @@ export default function Home() {
             👉📅End time: 2022/10/01 ⏳08:00 GMT +08:00🕗
           </p>
           <div className="bg-[#f7f6f0] rounded-[24px] mt-[16px] overflow-hidden">
-            <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden">
+            <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden select-none pointer-events-none">
               <img
                 className="w-auto h-full relative z-10"
-                src={data.src}
+                src={data?.src}
                 alt="NFT"
               />
               <img
                 className="w-[200%] h-[200%] absolute blur-3xl transform-gpu opacity-50 translate-y-[-30%]"
-                src={data.src}
+                src={data?.src}
                 alt="NFT_background"
               />
             </div>
@@ -56,10 +56,10 @@ export default function Home() {
             </div>
           </div>
           <p className="font-normal text-xs leading-4 text-center mt-[32px]">
-            {data.description}
+            {data?.description}
           </p>
           <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
-            Claimed: {data.claimed}
+            Claimed: {data?.claimed}
           </p>
           <Button
             variant="claim"
