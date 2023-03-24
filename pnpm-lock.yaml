@@ -4,6 +4,7 @@ specifiers:
   '@joyid/core': ^0.0.9
   '@legendapp/state': ^0.23.4
   '@radix-ui/react-dropdown-menu': ^2.0.4
+  '@radix-ui/react-toast': ^1.1.3
   '@svgr/webpack': 5.5.0
   '@types/node': 18.15.5
   '@types/react': 18.0.28
@@ -31,6 +32,7 @@ dependencies:
   '@joyid/core': registry.npmjs.org/@joyid/core/0.0.9
   '@legendapp/state': registry.npmjs.org/@legendapp/state/0.23.4_react@18.2.0
   '@radix-ui/react-dropdown-menu': registry.npmjs.org/@radix-ui/react-dropdown-menu/2.0.4_zula6vjvt3wdocc4mwcxqa6nzi
+  '@radix-ui/react-toast': registry.npmjs.org/@radix-ui/react-toast/1.1.3_biqbaboplfbrettd7655fr4n2y
   '@svgr/webpack': registry.npmjs.org/@svgr/webpack/5.5.0
   '@types/node': registry.npmjs.org/@types/node/18.15.5
   '@types/react': registry.npmjs.org/@types/react/18.0.28
@@ -2273,6 +2275,32 @@ packages:
       react: registry.npmjs.org/react/18.2.0
     dev: false
 
+  registry.npmjs.org/@radix-ui/react-toast/1.1.3_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-yHFgpxi9wjbfPvpSPdYAzivCqw48eA1ofT8m/WqYOVTxKPdmQMuVKRYPlMmj4C1d6tJdFj/LBa1J4iY3fL4OwQ==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@radix-ui/react-toast/-/react-toast-1.1.3.tgz}
+    id: registry.npmjs.org/@radix-ui/react-toast/1.1.3
+    name: '@radix-ui/react-toast'
+    version: 1.1.3
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': registry.npmjs.org/@babel/runtime/7.21.0
+      '@radix-ui/primitive': registry.npmjs.org/@radix-ui/primitive/1.0.0
+      '@radix-ui/react-collection': registry.npmjs.org/@radix-ui/react-collection/1.0.2_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-compose-refs': registry.npmjs.org/@radix-ui/react-compose-refs/1.0.0_react@18.2.0
+      '@radix-ui/react-context': registry.npmjs.org/@radix-ui/react-context/1.0.0_react@18.2.0
+      '@radix-ui/react-dismissable-layer': registry.npmjs.org/@radix-ui/react-dismissable-layer/1.0.3_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-portal': registry.npmjs.org/@radix-ui/react-portal/1.0.2_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-presence': registry.npmjs.org/@radix-ui/react-presence/1.0.0_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-primitive': registry.npmjs.org/@radix-ui/react-primitive/1.0.2_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-use-callback-ref': registry.npmjs.org/@radix-ui/react-use-callback-ref/1.0.0_react@18.2.0
+      '@radix-ui/react-use-controllable-state': registry.npmjs.org/@radix-ui/react-use-controllable-state/1.0.0_react@18.2.0
+      '@radix-ui/react-use-layout-effect': registry.npmjs.org/@radix-ui/react-use-layout-effect/1.0.0_react@18.2.0
+      '@radix-ui/react-visually-hidden': registry.npmjs.org/@radix-ui/react-visually-hidden/1.0.2_biqbaboplfbrettd7655fr4n2y
+      react: registry.npmjs.org/react/18.2.0
+      react-dom: registry.npmjs.org/react-dom/18.2.0_react@18.2.0
+    dev: false
+
   registry.npmjs.org/@radix-ui/react-use-callback-ref/1.0.0_react@18.2.0:
     resolution: {integrity: sha512-GZtyzoHz95Rhs6S63D2t/eqvdFCm7I+yHMLVQheKM7nBD8mbZIt+ct1jz4536MDnaOGKIxynJ8eHTkVGVVkoTg==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@radix-ui/react-use-callback-ref/-/react-use-callback-ref-1.0.0.tgz}
     id: registry.npmjs.org/@radix-ui/react-use-callback-ref/1.0.0
@@ -2347,6 +2375,21 @@ packages:
       '@babel/runtime': registry.npmjs.org/@babel/runtime/7.21.0
       '@radix-ui/react-use-layout-effect': registry.npmjs.org/@radix-ui/react-use-layout-effect/1.0.0_react@18.2.0
       react: registry.npmjs.org/react/18.2.0
+    dev: false
+
+  registry.npmjs.org/@radix-ui/react-visually-hidden/1.0.2_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-qirnJxtYn73HEk1rXL12/mXnu2rwsNHDID10th2JGtdK25T9wX+mxRmGt7iPSahw512GbZOc0syZX1nLQGoEOg==, registry: https://registry.yarnpkg.com/, tarball: https://registry.npmjs.org/@radix-ui/react-visually-hidden/-/react-visually-hidden-1.0.2.tgz}
+    id: registry.npmjs.org/@radix-ui/react-visually-hidden/1.0.2
+    name: '@radix-ui/react-visually-hidden'
+    version: 1.0.2
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': registry.npmjs.org/@babel/runtime/7.21.0
+      '@radix-ui/react-primitive': registry.npmjs.org/@radix-ui/react-primitive/1.0.2_biqbaboplfbrettd7655fr4n2y
+      react: registry.npmjs.org/react/18.2.0
+      react-dom: registry.npmjs.org/react-dom/18.2.0_react@18.2.0
     dev: false
 
   registry.npmjs.org/@radix-ui/rect/1.0.0:

@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app'
 import { Space_Grotesk } from 'next/font/google'
 import { configureObservablePersistence } from '@legendapp/state/persist'
 import { ObservablePersistLocalStorage } from '@legendapp/state/persist-plugins/local-storage'
+import { Toaster } from '@/components/ui/toaster'
 
 const SpaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -22,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}</style>
       <Component {...pageProps} />
+      <Toaster />
     </>
   )
 }
