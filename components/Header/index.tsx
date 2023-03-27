@@ -17,7 +17,7 @@ import { truncateMiddle } from '@/lib/utils'
 export const Header = observer(() => {
   const login = useLogin()
   const logout = useLogout()
-  const authStateValue = authState.get()
+  const auth = authState.get()
 
   return (
     <header className="w-full h-[68px] fixed top-0 left-0 bg-white flex justify-center drop-shadow-md">
@@ -26,7 +26,7 @@ export const Header = observer(() => {
           <LogoIconSVG className="w-[32px] h-[32px] mr-[6px]" />
           Freeminter
         </div>
-        {authStateValue != null ? (
+        {auth != null ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Button variant="outline">
@@ -41,7 +41,7 @@ export const Header = observer(() => {
                 }}
               >
                 <CardCoinIconSVG className="mr-[8px]" />
-                {truncateMiddle(authStateValue.address)}
+                {truncateMiddle(auth.address)}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={logout}>
                 <LogoutIconSVG className="mr-[8px]" />

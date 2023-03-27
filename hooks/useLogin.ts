@@ -26,6 +26,7 @@ export function useLogin() {
       })
       if (res.error == null) {
         authState.set(res.data)
+        return res.data
       } else {
         toast({
           title: res.error,

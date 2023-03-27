@@ -1,10 +1,67 @@
 import Head from 'next/head'
 import { Header } from '@/components/Header'
 import useSWR from 'swr'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
+import { observer } from '@legendapp/state/react-components'
+import { EventStatus, useEventStatus } from '@/hooks/useEventStatus'
+import { Loader2 } from 'lucide-react'
+import { usePostAirdrops } from '@/hooks/usePostAirdrops'
+import { useToast } from '@/hooks/useToast'
+
+const ClaimButton = observer(() => {
+  const {
+    data: eventStatus = EventStatus.Claimable,
+    isLoading,
+    mutate,
+  } = useEventStatus()
+  const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
+  const { toast } = useToast()
+  return (
+    <Button
+      variant={
+        (
+          {
+            [EventStatus.Claimable]: 'claim',
+            [EventStatus.Claimed]: 'view_wallet',
+            [EventStatus.Finished]: 'finished',
+          } as unknown as { [key in EventStatus]: ButtonProps['variant'] }
+        )[eventStatus]
+      }
+      className="mt-[12px]"
+      disabled={
+        isLoading || eventStatus === EventStatus.Finished || isPostingAirdrops
+      }
+      onClick={async () => {
+        if (isLoading || eventStatus === EventStatus.Finished) return
+        if (eventStatus === EventStatus.Claimed) {
+          window.open('https://app.joyid.dev/')
+        }
+        if (eventStatus === EventStatus.Claimable) {
+          await postAirdrops()
+          await mutate()
+          toast({
+            title: '✅ Succeed',
+            description: 'Successful Claim NFT!',
+          })
+        }
+      }}
+    >
+      {isLoading || isPostingAirdrops ? (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      ) : null}
+      {
+        {
+          [EventStatus.Claimable]: 'Claim',
+          [EventStatus.Claimed]: 'View wallet',
+          [EventStatus.Finished]: 'Finished',
+        }[eventStatus]
+      }
+    </Button>
+  )
+})
 
 export default function Home() {
-  const { data } = useSWR(`GetNFTInfo`, () => {
+  const { data } = useSWR([`GetNFTInfo`], async () => {
     return {
       src: '/images/NFT_image.png',
       description:
@@ -61,12 +118,7 @@ export default function Home() {
           <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
             Claimed: {data?.claimed}
           </p>
-          <Button
-            variant="claim"
-            className="bg-[#D2FF00] border-[#000] border-[1px] rounded-[16px] py-[15px] text-base font-bold leading-4 mt-[12px]"
-          >
-            Claim
-          </Button>
+          <ClaimButton />
         </main>
       </div>
     </>

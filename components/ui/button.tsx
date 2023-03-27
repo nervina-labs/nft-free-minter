@@ -3,7 +3,7 @@ import { VariantProps, cva } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 export const buttonVariants = cva(
-  'active:scale-95 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 disabled:opacity-50 dark:focus:ring-slate-400 disabled:pointer-events-none dark:focus:ring-offset-slate-900 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800 transition duration-75',
+  'active:scale-95 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 disabled:opacity-50 disabled:select-none dark:focus:ring-slate-400 disabled:pointer-events-none dark:focus:ring-offset-slate-900 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800 transition duration-75',
   {
     variants: {
       variant: {
@@ -11,6 +11,10 @@ export const buttonVariants = cva(
           'bg-slate-900 text-white hover:bg-slate-700 dark:bg-slate-50 dark:text-slate-900',
         claim:
           'bg-[#D2FF00] border-[#000] border-[1px] rounded-[16px] py-[15px] text-base font-bold leading-4',
+        view_wallet:
+          'bg-white border-[#000] border-[1px] rounded-[16px] py-[15px] text-base font-bold leading-4',
+        finished:
+          'bg-[#1f202233] text-[#1f202266] disabled:opacity-100 border-[currentColor] border-[1px] rounded-[16px] py-[15px] text-base font-bold leading-4',
         connect: 'py-[8px] px-[16px] rounded-[40px] bg-[#3233FF] text-white',
         outline:
           'bg-transparent border border-[#333] px-[30px] py-[10px] rounded-full',
