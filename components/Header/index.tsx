@@ -13,6 +13,7 @@ import {
 import { observer } from '@legendapp/state/react-components'
 import { authState, useLogin, useLogout } from '@/hooks/useLogin'
 import { truncateMiddle } from '@/lib/utils'
+import { JOYID_APP_URL } from '@/constants'
 
 export const Header = observer(() => {
   const login = useLogin()
@@ -37,7 +38,7 @@ export const Header = observer(() => {
             <DropdownMenuContent sideOffset={14}>
               <DropdownMenuItem
                 onClick={() => {
-                  window.open('https://app.joyid.dev/')
+                  window.open(JOYID_APP_URL)
                 }}
               >
                 <CardCoinIconSVG className="mr-[8px]" />

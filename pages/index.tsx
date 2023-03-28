@@ -5,9 +5,9 @@ import { observer } from '@legendapp/state/react-components'
 import { EventStatus, useEventStatus } from '@/hooks/useEventStatus'
 import { Loader2 } from 'lucide-react'
 import { usePostAirdrops } from '@/hooks/usePostAirdrops'
-import { useToast } from '@/hooks/useToast'
 import NFTImage from '@/assets/NFT_image.png'
 import Image from 'next/image'
+import { JOYID_APP_URL } from '@/constants'
 
 const ClaimButton = observer(() => {
   const {
@@ -16,7 +16,6 @@ const ClaimButton = observer(() => {
     mutate,
   } = useEventStatus()
   const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
-  const { toast } = useToast()
   return (
     <Button
       variant={
@@ -35,14 +34,11 @@ const ClaimButton = observer(() => {
       onClick={async () => {
         if (isLoading || eventStatus === EventStatus.Finished) return
         if (eventStatus === EventStatus.Claimed) {
-          window.open('https://app.joyid.dev/')
+          window.open(JOYID_APP_URL)
         }
         if (eventStatus === EventStatus.Claimable) {
-          await postAirdrops()
-          await mutate()
-          toast({
-            title: '✅ Succeed',
-            description: 'Successful Claim NFT!',
+          await postAirdrops(async () => {
+            await mutate()
           })
         }
       }}

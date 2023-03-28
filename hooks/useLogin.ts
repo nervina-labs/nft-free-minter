@@ -29,7 +29,8 @@ export function useLogin() {
         return res.data
       } else {
         toast({
-          title: res.error,
+          title: '⚠️ Error',
+          description: res.error,
           variant: 'destructive',
         })
       }

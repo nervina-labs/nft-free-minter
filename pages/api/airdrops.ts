@@ -6,6 +6,7 @@ import {
   verifyCredential,
   verifySignature,
 } from '@joyid/core'
+import { ErrorCode } from '@/api/ErrorCode'
 
 export default async function handler(
   req: NextApiRequest,
@@ -30,12 +31,12 @@ export default async function handler(
       signedData.alg
     )
     if (!isValid) {
-      res.status(401).json({ code: 'INVALID_CREDENTIAL' })
+      res.status(401).json({ code: ErrorCode.INVALID_CREDENTIAL })
       return
     }
   } catch (error: any) {
     res.status(500).json({
-      code: 'UNKNOWN_ERROR',
+      code: ErrorCode.UNKNOWN_ERROR,
       message: error?.message,
     })
     return
@@ -44,13 +45,13 @@ export default async function handler(
   try {
     const isValid = await verifySignature(signedData)
     if (!isValid) {
-      res.status(401).json({ code: 'INVALID_SIGNATURE' })
+      res.status(401).json({ code: ErrorCode.INVALID_SIGNATURE })
       return
     }
   } catch (error: any) {
     console.log(error)
     res.status(500).json({
-      code: 'UNKNOWN_ERROR',
+      code: ErrorCode.UNKNOWN_ERROR,
       message: error?.message,
     })
     return

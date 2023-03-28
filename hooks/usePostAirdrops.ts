@@ -11,58 +11,62 @@ export function usePostAirdrops() {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
   const login = useLogin()
-  const postAirdrops = useCallback(async () => {
-    if (isLoading) return
-    setIsLoading(true)
-    let address = auth?.address
-    if (!address) {
+  const postAirdrops = useCallback(
+    async (callback?: () => void) => {
+      if (isLoading) return
       setIsLoading(true)
-      const data = await login()
-      if (!data?.address) {
+      try {
+        const a = auth ? auth : await login()
+        if (!a) {
+          setIsLoading(false)
+          return
+        }
+        await api.postAirdrops(a.address, {
+          signature: a.signature!,
+          message: a.message!,
+          pubkey: a.pubkey,
+          challenge: a.challenge!,
+          keyType: a.keyType,
+          alg: a.alg,
+        })
+        await callback?.()
         toast({
-          variant: 'destructive',
-          title: '⚠️ Error',
-          description: 'Unknown error, please try again',
+          title: '✅ Succeed',
+          description: 'Successful Claim NFT!',
         })
         setIsLoading(false)
-        return
+      } catch (error) {
+        setIsLoading(false)
+        if (error instanceof AxiosError) {
+          const code: ErrorCode = error.response?.data?.code
+          toast({
+            variant: 'destructive',
+            title: '⚠️ Error',
+            description:
+              {
+                [ErrorCode.AIRDROPS_DISABLED]: 'The airdrops is disabled',
+                [ErrorCode.ACCESS_TOKEN_NOT_FOUND]: '',
+                [ErrorCode.ACCESS_TOKEN_NOT_MATCH]: '',
+                [ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED]: '',
+                [ErrorCode.INVALID_CREDENTIAL]:
+                  'Invalid device, please check the JoyID wallet',
+                [ErrorCode.UNKNOWN_ERROR]: '',
+                [ErrorCode.INVALID_SIGNATURE]:
+                  'Invalid signature, please try again',
+              }[code] || 'Unknown error',
+          })
+        } else {
+          toast({
+            variant: 'destructive',
+            title: '⚠️ Error',
+            description: (error as any)?.message || 'Unknown error',
+          })
+        }
+        throw error
       }
-      address = data?.address
-    }
-    try {
-      await api.postAirdrops(address, {
-        signature: auth?.signature!,
-        message: auth?.message!,
-        pubkey: auth?.pubkey!,
-        challenge: auth?.challenge!,
-        keyType: auth?.keyType!,
-        alg: auth?.alg!,
-      })
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const code: ErrorCode = error.response?.data?.code
-        toast({
-          variant: 'destructive',
-          title: '⚠️ Error',
-          description:
-            {
-              [ErrorCode.AIRDROPS_DISABLED]: '',
-              [ErrorCode.ACCESS_TOKEN_NOT_FOUND]: '',
-              [ErrorCode.ACCESS_TOKEN_NOT_MATCH]: '',
-              [ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED]: '',
-            }[code] || 'Unknown error',
-        })
-      } else {
-        toast({
-          variant: 'destructive',
-          title: '⚠️ Error',
-          description: (error as any)?.message || 'Unknown error',
-        })
-      }
-      throw error
-    }
-    setIsLoading(false)
-  }, [auth, isLoading, login, toast])
+    },
+    [auth, isLoading, login, toast]
+  )
   return {
     isLoading,
     postAirdrops,
