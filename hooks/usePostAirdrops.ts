@@ -49,9 +49,10 @@ export function usePostAirdrops() {
         toast({
           variant: 'destructive',
           title: '⚠️ Error',
-          description: 'Unknown error',
+          description: (error as any)?.message || 'Unknown error',
         })
       }
+      throw error
     }
     setIsLoading(false)
   }, [auth?.address, isLoading, login, toast])

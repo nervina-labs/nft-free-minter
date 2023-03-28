@@ -1,12 +1,13 @@
 import Head from 'next/head'
 import { Header } from '@/components/Header'
-import useSWR from 'swr'
 import { Button, ButtonProps } from '@/components/ui/button'
 import { observer } from '@legendapp/state/react-components'
 import { EventStatus, useEventStatus } from '@/hooks/useEventStatus'
 import { Loader2 } from 'lucide-react'
 import { usePostAirdrops } from '@/hooks/usePostAirdrops'
 import { useToast } from '@/hooks/useToast'
+import NFTImage from '@/assets/NFT_image.png'
+import Image from 'next/image'
 
 const ClaimButton = observer(() => {
   const {
@@ -61,15 +62,6 @@ const ClaimButton = observer(() => {
 })
 
 export default function Home() {
-  const { data } = useSWR([`GetNFTInfo`], async () => {
-    return {
-      src: '/images/NFT_image.png',
-      description:
-        'The inaugural Web3 Festival，co-hosted by Wangxiang Blockchain Labs and HashKey Group and organized by W3ME, will take place on April 12-15 at 5/F,Hong Kong Conventionand Exhibition Center(HKCEC).This four-day event, hosted on five center stages across an area of about9,000m2,will see over 10,000 attendees.',
-      claimed: 204,
-    }
-  })
-
   return (
     <>
       <Head>
@@ -80,7 +72,7 @@ export default function Home() {
         />
         <link rel="icon" href="/logo.svg" />
       </Head>
-      <div className="bg-[#fafafa] h-screen flex flex-col justify-start items-center">
+      <div className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center pb-[48px]">
         <Header />
         <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col">
           <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
@@ -91,14 +83,18 @@ export default function Home() {
           </p>
           <div className="bg-[#f7f6f0] rounded-[24px] mt-[16px] overflow-hidden">
             <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden select-none pointer-events-none">
-              <img
+              <Image
                 className="w-auto h-full relative z-10"
-                src={data?.src}
+                src={NFTImage.src}
+                width={NFTImage.width}
+                height={NFTImage.height}
                 alt="NFT"
               />
-              <img
+              <Image
                 className="w-[200%] h-[200%] absolute blur-3xl transform-gpu opacity-50 translate-y-[-30%]"
-                src={data?.src}
+                src={NFTImage.src}
+                width={NFTImage.width}
+                height={NFTImage.height}
                 alt="NFT_background"
               />
             </div>
@@ -113,10 +109,14 @@ export default function Home() {
             </div>
           </div>
           <p className="font-normal text-xs leading-4 text-center mt-[32px]">
-            {data?.description}
+            The inaugural Web3 Festival，co-hosted by Wangxiang Blockchain Labs
+            and HashKey Group and organized by W3ME, will take place on April
+            12-15 at 5/F,Hong Kong Conventionand Exhibition Center(HKCEC).This
+            four-day event, hosted on five center stages across an area of
+            about9,000m2,will see over 10,000 attendees.
           </p>
           <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
-            Claimed: {data?.claimed}
+            Claimed: 204
           </p>
           <ClaimButton />
         </main>

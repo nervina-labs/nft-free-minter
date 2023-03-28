@@ -20,7 +20,7 @@ export const Header = observer(() => {
   const auth = authState.get()
 
   return (
-    <header className="w-full h-[68px] fixed top-0 left-0 bg-white flex justify-center drop-shadow-md">
+    <header className="w-full h-[68px] fixed top-0 left-0 bg-white flex justify-center drop-shadow-md z-30">
       <div className="w-[1120px] h-full flex justify-between items-center px-[25px] sm:px-[80px]">
         <div className="flex font-bold text-[24px] leading-[32px] h-[36px] leading-[36px]">
           <LogoIconSVG className="w-[32px] h-[32px] mr-[6px]" />
