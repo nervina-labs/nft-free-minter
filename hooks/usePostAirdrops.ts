@@ -30,7 +30,14 @@ export function usePostAirdrops() {
       address = data?.address
     }
     try {
-      await api.postAirdrops(address)
+      await api.postAirdrops(address, {
+        signature: auth?.signature!,
+        message: auth?.message!,
+        pubkey: auth?.pubkey!,
+        challenge: auth?.challenge!,
+        keyType: auth?.keyType!,
+        alg: auth?.alg!,
+      })
     } catch (error) {
       if (error instanceof AxiosError) {
         const code: ErrorCode = error.response?.data?.code
@@ -55,7 +62,7 @@ export function usePostAirdrops() {
       throw error
     }
     setIsLoading(false)
-  }, [auth?.address, isLoading, login, toast])
+  }, [auth, isLoading, login, toast])
   return {
     isLoading,
     postAirdrops,
