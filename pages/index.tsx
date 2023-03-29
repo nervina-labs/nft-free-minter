@@ -39,6 +39,8 @@ const ClaimButton = observer(() => {
         if (eventStatus === EventStatus.Claimable) {
           await postAirdrops(async () => {
             await mutate()
+          }).catch(() => {
+            return mutate()
           })
         }
       }}
