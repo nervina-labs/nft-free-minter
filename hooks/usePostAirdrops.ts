@@ -21,14 +21,25 @@ export function usePostAirdrops() {
           setIsLoading(false)
           return
         }
-        await api.postAirdrops(a.address, {
-          signature: a.signature!,
-          message: a.message!,
-          pubkey: a.pubkey,
-          challenge: a.challenge!,
-          keyType: a.keyType,
-          alg: a.alg,
-        })
+        await api
+          .postAirdrops(a.address, {
+            signature: a.signature!,
+            message: a.message!,
+            pubkey: a.pubkey,
+            challenge: a.challenge!,
+            keyType: a.keyType,
+            alg: a.alg,
+          })
+          .catch((error) => {
+            const code: ErrorCode = error.response?.data?.code
+            if (
+              error instanceof AxiosError &&
+              code === ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED
+            ) {
+              return
+            }
+            throw error
+          })
         await callback?.()
         toast({
           title: '✅ Succeed',

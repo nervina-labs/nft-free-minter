@@ -7,7 +7,8 @@ import { Loader2 } from 'lucide-react'
 import { usePostAirdrops } from '@/hooks/usePostAirdrops'
 import NFTImage from '@/assets/NFT_image.png'
 import Image from 'next/image'
-import { JOYID_APP_URL } from '@/constants'
+import { EVENT_END_TIME, JOYID_APP_URL } from '@/constants'
+import { useMemo } from 'react'
 
 const ClaimButton = observer(() => {
   const {
@@ -60,6 +61,16 @@ const ClaimButton = observer(() => {
 })
 
 export default function Home() {
+  const endTime = useMemo(() => {
+    console.log(EVENT_END_TIME)
+    if (!EVENT_END_TIME) return null
+    const date = new Date(EVENT_END_TIME)
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ⏳${
+      hours <= 9 ? '0' + hours : hours
+    }:${minutes <= 9 ? '0' + hours : hours} GMT +08:00🕗`
+  }, [])
   return (
     <>
       <Head>
@@ -77,7 +88,7 @@ export default function Home() {
             Web3 Festival Attendency Proof 🎫
           </h1>
           <p className="text-xs text-[#333] leading-[20px] text-center font-medium mt-[8px]">
-            👉📅End time: 2022/10/01 ⏳08:00 GMT +08:00🕗
+            👉📅End time: {endTime}
           </p>
           <div className="bg-[#f7f6f0] rounded-[24px] mt-[16px] overflow-hidden">
             <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden select-none pointer-events-none">
