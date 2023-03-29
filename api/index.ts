@@ -1,5 +1,4 @@
 import axios, { Axios } from 'axios'
-import { NFTBOX_SERVER_URL } from '@/constants/env'
 import { HolderToken } from '@/api/models/HolderToken'
 import { SignMessageResponseData } from '@joyid/core'
 
@@ -18,7 +17,7 @@ export class API {
   }
 
   getHolderTokens(address: string) {
-    return this.axios.get<HolderToken>(`${NFTBOX_SERVER_URL}/holder_tokens`, {
+    return this.axios.get<HolderToken>(`/api/holder_tokens`, {
       params: {
         address,
       },
