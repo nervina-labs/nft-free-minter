@@ -83,7 +83,10 @@ export default function Home() {
   }, [])
   const { data: claimCount, mutate: refetchClaimCount } = useSWR(
     [QueryKey.GetClaimCount],
-    async () => api.getClaimCount().then((res) => res.data.claimed_count)
+    async () => api.getClaimCount().then((res) => res.data.claimed_count),
+    {
+      refreshInterval: 5000,
+    }
   )
 
   return (
