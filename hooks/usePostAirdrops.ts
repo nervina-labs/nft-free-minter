@@ -1,53 +1,46 @@
-import { authState, useLogin } from '@/hooks/useLogin'
+import { authState } from '@/hooks/useLogin'
 import { useCallback, useState } from 'react'
 import { api } from '@/api'
 import { AxiosError } from 'axios'
 import { useToast } from '@/hooks/useToast'
 import { ErrorCode } from '@/api/ErrorCode'
 import { useSelector } from '@legendapp/state/react'
+import { signWithPopup } from '@joyid/core'
 
 export function usePostAirdrops() {
   const auth = useSelector(() => authState.get())
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
-  const login = useLogin()
   const postAirdrops = useCallback(
     async (callback?: () => void) => {
       if (isLoading) return
       setIsLoading(true)
       try {
-        const a = auth ? auth : await login()
-        if (!a) {
+        if (!auth) {
           setIsLoading(false)
           return
         }
-        const status = await api
-          .postAirdrops(a.address, {
-            signature: a.signature!,
-            message: a.message!,
-            pubkey: a.pubkey,
-            challenge: a.challenge!,
-            keyType: a.keyType,
-            alg: a.alg,
+        const sig = await signWithPopup({
+          redirectURL: location.origin + '/',
+          name: 'Freeminter',
+          challenge: 'Claim a NFT',
+          logo: location.origin + '/logo.svg',
+          address: auth.address,
+        })
+        if (sig.error) {
+          toast({
+            variant: 'destructive',
+            title: '⚠️ Error',
+            description: sig.error,
           })
+          return
+        }
+        await api
+          .postAirdrops(auth.address, sig.data!)
           .then(() => 'succeed' as const)
-          .catch((error) => {
-            const code: ErrorCode = error.response?.data?.code
-            if (
-              error instanceof AxiosError &&
-              code === ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED
-            ) {
-              return 'claimed' as const
-            }
-            throw error
-          })
         await callback?.()
         toast({
-          title: '✅ Succeed',
-          description: {
-            succeed: 'Successful Claim NFT!',
-            claimed: 'You have already claimed it',
-          }[status],
+          title: '🎉 Congratulations! OAT will be delivered soon.',
         })
         setIsLoading(false)
       } catch (error) {
@@ -62,7 +55,8 @@ export function usePostAirdrops() {
                 [ErrorCode.AIRDROPS_DISABLED]: 'The airdrops is disabled',
                 [ErrorCode.ACCESS_TOKEN_NOT_FOUND]: '',
                 [ErrorCode.ACCESS_TOKEN_NOT_MATCH]: '',
-                [ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED]: '',
+                [ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED]:
+                  'You have already claimed it',
                 [ErrorCode.INVALID_CREDENTIAL]:
                   'Invalid device, please check the JoyID wallet',
                 [ErrorCode.UNKNOWN_ERROR]: '',
@@ -80,7 +74,7 @@ export function usePostAirdrops() {
         throw error
       }
     },
-    [auth, isLoading, login, toast]
+    [auth, isLoading, toast]
   )
   return {
     isLoading,

@@ -12,14 +12,21 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 import { api } from '@/api'
 import { QueryKey } from '@/api/QueryKey'
+import { authState, useLogin } from '@/hooks/useLogin'
 
-const ClaimButton = observer(() => {
+const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
   const {
     data: eventStatus = EventStatus.Claimable,
     isLoading,
     mutate,
   } = useEventStatus()
   const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
+  const auth = authState.get()
+  const login = useLogin()
+  const refetch = async () => {
+    await onClaim?.()
+    await mutate()
+  }
   return (
     <Button
       variant={
@@ -41,11 +48,12 @@ const ClaimButton = observer(() => {
           window.open(JOYID_APP_URL)
         }
         if (eventStatus === EventStatus.Claimable) {
-          await postAirdrops(async () => {
-            await mutate()
-          }).catch(() => {
-            return mutate()
-          })
+          if (!auth) {
+            await login()
+            await refetch()
+            return
+          }
+          await postAirdrops(() => refetch()).catch(async () => refetch())
         }
       }}
     >
@@ -73,8 +81,9 @@ export default function Home() {
       hours <= 9 ? '0' + hours : hours
     }:${minutes <= 9 ? '0' + hours : hours} GMT +08:00🕗`
   }, [])
-  const { data: claimCount } = useSWR([QueryKey.GetClaimCount], async () =>
-    api.getClaimCount().then((res) => res.data.claimed_count)
+  const { data: claimCount, mutate: refetchClaimCount } = useSWR(
+    [QueryKey.GetClaimCount],
+    async () => api.getClaimCount().then((res) => res.data.claimed_count)
   )
 
   return (
@@ -133,7 +142,7 @@ export default function Home() {
           <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
             Claimed: {claimCount || '-'}
           </p>
-          <ClaimButton />
+          <ClaimButton onClaim={refetchClaimCount} />
         </main>
       </div>
     </>

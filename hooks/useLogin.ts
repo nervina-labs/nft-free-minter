@@ -30,7 +30,7 @@ export function useLogin() {
       } else {
         toast({
           title: '⚠️ Error',
-          description: res.error,
+          description: 'Wallet refused the action.',
           variant: 'destructive',
         })
       }
