@@ -23,6 +23,10 @@ export class API {
       },
     })
   }
+
+  getClaimCount() {
+    return this.axios.get<{ claimed_count: number }>('/api/airdrops')
+  }
 }
 
 export const api = new API()

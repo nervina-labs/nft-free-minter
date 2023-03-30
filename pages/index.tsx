@@ -9,6 +9,9 @@ import NFTImage from '@/assets/NFT_image.png'
 import Image from 'next/image'
 import { EVENT_END_TIME, JOYID_APP_URL } from '@/constants'
 import { useMemo } from 'react'
+import useSWR from 'swr'
+import { api } from '@/api'
+import { QueryKey } from '@/api/QueryKey'
 
 const ClaimButton = observer(() => {
   const {
@@ -62,7 +65,6 @@ const ClaimButton = observer(() => {
 
 export default function Home() {
   const endTime = useMemo(() => {
-    console.log(EVENT_END_TIME)
     if (!EVENT_END_TIME) return null
     const date = new Date(EVENT_END_TIME)
     const hours = date.getHours()
@@ -71,6 +73,10 @@ export default function Home() {
       hours <= 9 ? '0' + hours : hours
     }:${minutes <= 9 ? '0' + hours : hours} GMT +08:00🕗`
   }, [])
+  const { data: claimCount } = useSWR([QueryKey.GetClaimCount], async () =>
+    api.getClaimCount().then((res) => res.data.claimed_count)
+  )
+
   return (
     <>
       <Head>
@@ -125,7 +131,7 @@ export default function Home() {
             about9,000m2,will see over 10,000 attendees.
           </p>
           <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
-            Claimed: 204
+            Claimed: {claimCount || '-'}
           </p>
           <ClaimButton />
         </main>

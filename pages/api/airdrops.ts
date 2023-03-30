@@ -8,14 +8,7 @@ import {
 } from '@joyid/core'
 import { ErrorCode } from '@/api/ErrorCode'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    res.status(404).end()
-    return
-  }
+async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   if (!('address' in req.body)) {
     res.status(400).end()
     return
@@ -76,4 +69,32 @@ export default async function handler(
     }
   }
   res.end()
+}
+
+async function getHandler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const response = await axios.get(`${NFTBOX_SERVER_URL}/airdrops`, {
+      params: {
+        access_token: NFTBOX_ACCESS_TOKEN,
+      },
+    })
+    res.status(response.status).json(response.data)
+  } catch (error) {
+    console.error(error)
+    if (error instanceof AxiosError) {
+      res.status(error.status || 500).json(error.response?.data || {})
+    } else {
+      res.status(500)
+    }
+  }
+  res.end()
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === 'GET') return await getHandler(req, res)
+  if (req.method === 'POST') return await postHandler(req, res)
+  res.status(404).end()
 }
