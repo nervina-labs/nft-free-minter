@@ -21,7 +21,7 @@ export function usePostAirdrops() {
           setIsLoading(false)
           return
         }
-        await api
+        const status = await api
           .postAirdrops(a.address, {
             signature: a.signature!,
             message: a.message!,
@@ -30,20 +30,24 @@ export function usePostAirdrops() {
             keyType: a.keyType,
             alg: a.alg,
           })
+          .then(() => 'succeed' as const)
           .catch((error) => {
             const code: ErrorCode = error.response?.data?.code
             if (
               error instanceof AxiosError &&
               code === ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED
             ) {
-              return
+              return 'claimed' as const
             }
             throw error
           })
         await callback?.()
         toast({
           title: '✅ Succeed',
-          description: 'Successful Claim NFT!',
+          description: {
+            succeed: 'Successful Claim NFT!',
+            claimed: 'You have already claimed it',
+          }[status],
         })
         setIsLoading(false)
       } catch (error) {
