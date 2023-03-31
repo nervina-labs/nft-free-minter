@@ -23,7 +23,7 @@ export function usePostAirdrops() {
         const sig = await signWithPopup({
           redirectURL: location.origin + '/',
           name: 'Freeminter',
-          challenge: 'Claim a NFT',
+          challenge: 'Claim a OAT',
           logo: location.origin + '/logo.svg',
           address: auth.address,
         })
@@ -33,6 +33,7 @@ export function usePostAirdrops() {
             title: '⚠️ Error',
             description: sig.error,
           })
+          setIsLoading(false)
           return
         }
         await api
