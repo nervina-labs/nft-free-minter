@@ -18,12 +18,17 @@ export function useLogin() {
   const { toast } = useToast()
   return useCallback(
     async (nonce: number = Math.floor(Math.random() * 10)) => {
-      const res = await authWithPopup({
-        redirectURL: location.origin + '/',
-        name: 'FreeMinter',
-        challenge: `nonce: ${nonce}`,
-        logo: location.origin + '/logo.svg',
-      })
+      const res = await authWithPopup(
+        {
+          redirectURL: location.origin + '/',
+          name: 'FreeMinter',
+          challenge: `nonce: ${nonce}`,
+          logo: location.origin + '/logo.svg',
+        },
+        {
+          timeoutInSeconds: 86400,
+        }
+      )
       if (res.error == null) {
         authState.set(res.data)
         return res.data

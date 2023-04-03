@@ -20,13 +20,18 @@ export function usePostAirdrops() {
           setIsLoading(false)
           return
         }
-        const sig = await signWithPopup({
-          redirectURL: location.origin + '/',
-          name: 'Freeminter',
-          challenge: 'Claim a OAT',
-          logo: location.origin + '/logo.svg',
-          address: auth.address,
-        })
+        const sig = await signWithPopup(
+          {
+            redirectURL: location.origin + '/',
+            name: 'Freeminter',
+            challenge: 'Claim a OAT',
+            logo: location.origin + '/logo.svg',
+            address: auth.address,
+          },
+          {
+            timeoutInSeconds: 86400,
+          }
+        )
         if (sig.error) {
           toast({
             variant: 'destructive',
