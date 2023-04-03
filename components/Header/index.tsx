@@ -3,7 +3,7 @@ import WalletIconSVG from '@/assets/wallet.svg'
 import ArrowDownIconSVG from '@/assets/arrow-down.svg'
 import CardCoinIconSVG from '@/assets/card-coin.svg'
 import LogoutIconSVG from '@/assets/logout.svg'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { observer } from '@legendapp/state/react-components'
 import { authState, useLogin, useLogout } from '@/hooks/useLogin'
-import { truncateMiddle } from '@/lib/utils'
+import { cn, truncateMiddle } from '@/lib/utils'
 import { JOYID_APP_URL } from '@/constants'
 
 export const Header = observer(() => {
@@ -30,10 +30,10 @@ export const Header = observer(() => {
         {auth != null ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button variant="outline">
+              <div className={cn(buttonVariants({ variant: 'outline' }))}>
                 <WalletIconSVG className="mr-[4px]" />
                 <ArrowDownIconSVG />
-              </Button>
+              </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent sideOffset={14}>
               <DropdownMenuItem

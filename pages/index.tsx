@@ -8,7 +8,7 @@ import { usePostAirdrops } from '@/hooks/usePostAirdrops'
 import NFTImage from '@/assets/NFT_image.png'
 import Image from 'next/image'
 import { EVENT_END_TIME, JOYID_APP_URL } from '@/constants'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { api } from '@/api'
 import { QueryKey } from '@/api/QueryKey'
@@ -88,6 +88,10 @@ export default function Home() {
       refreshInterval: 5000,
     }
   )
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   return (
     <>
@@ -100,7 +104,7 @@ export default function Home() {
         <link rel="icon" href="/logo.svg" />
       </Head>
       <div className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center pb-[48px]">
-        <Header />
+        {isMounted ? <Header /> : null}
         <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col">
           <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
             Web3 Festival Attendency Proof 🎫
@@ -116,6 +120,7 @@ export default function Home() {
                 width={NFTImage.width}
                 height={NFTImage.height}
                 alt="NFT"
+                priority
               />
               <Image
                 className="w-[200%] h-[200%] absolute blur-3xl transform-gpu opacity-50 translate-y-[-30%]"
@@ -145,7 +150,7 @@ export default function Home() {
           <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
             Claimed: {claimCount || '-'}
           </p>
-          <ClaimButton onClaim={refetchClaimCount} />
+          {isMounted ? <ClaimButton onClaim={refetchClaimCount} /> : null}
         </main>
       </div>
     </>
