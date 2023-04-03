@@ -8,4 +8,4 @@ export const EVENT_TOKEN_UUID =
 export const EVENT_END_TIME = process.env.NEXT_PUBLIC_EVENT_END_TIME || null
 
 export const JOYID_APP_URL =
-  process.env.NEXT_PUBLIC_JOYID_APP_URL || 'https://joyid-dev.vercel.app'
+  process.env.NEXT_PUBLIC_JOYID_APP_URL || 'https://app.joyid.dev'
