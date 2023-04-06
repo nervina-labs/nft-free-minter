@@ -1,6 +1,6 @@
 import axios, { Axios } from 'axios'
 import { HolderToken } from '@/api/models/HolderToken'
-import { SignMessageResponseData } from '@joyid/core'
+import { AuthResponseData, SignMessageResponseData } from '@joyid/core'
 
 export class API {
   private axios: Axios
@@ -9,7 +9,10 @@ export class API {
     this.axios = axios.create()
   }
 
-  postAirdrops(address: string, signData: SignMessageResponseData) {
+  postAirdrops(
+    address: string,
+    signData: SignMessageResponseData | AuthResponseData
+  ) {
     return this.axios.post('/api/airdrops', {
       address,
       ...signData,
