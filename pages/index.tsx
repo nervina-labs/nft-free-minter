@@ -50,11 +50,6 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
           window.open(JOYID_APP_NFT_URL)
         }
         if (eventStatus === EventStatus.Claimable) {
-          if (!auth) {
-            await login()
-            await refetch()
-            return
-          }
           await postAirdrops(() => refetch()).catch(async () => refetch())
         }
       }}
