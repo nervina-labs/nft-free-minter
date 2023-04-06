@@ -22,7 +22,6 @@ export function useLogin() {
         {
           redirectURL: location.origin + '/',
           name: 'FreeMinter',
-          challenge: `nonce: ${nonce}`,
           logo: location.origin + '/logo.svg',
         },
         {

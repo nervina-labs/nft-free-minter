@@ -5,7 +5,7 @@ import { AxiosError } from 'axios'
 import { useToast } from '@/hooks/useToast'
 import { ErrorCode } from '@/api/ErrorCode'
 import { useSelector } from '@legendapp/state/react'
-import { signWithPopup } from '@joyid/core'
+import { AuthResponseData, authWithPopup, signWithPopup } from '@joyid/core'
 
 export function usePostAirdrops() {
   const auth = useSelector(() => authState.get())
@@ -16,22 +16,29 @@ export function usePostAirdrops() {
       if (isLoading) return
       setIsLoading(true)
       try {
-        if (!auth) {
-          setIsLoading(false)
-          return
-        }
-        const sig = await signWithPopup(
-          {
-            redirectURL: location.origin + '/',
-            name: 'Freeminter',
-            challenge: 'Claim a OAT',
-            logo: location.origin + '/logo.svg',
-            address: auth.address,
-          },
-          {
-            timeoutInSeconds: 86400,
-          }
-        )
+        const sig = !auth
+          ? await authWithPopup({
+              redirectURL: location.origin + '/',
+              name: 'Freeminter',
+              challenge: `Claim a OAT\nNonce: ${Math.floor(
+                Math.random() * 100001
+              )}`,
+              logo: location.origin + '/logo.svg',
+            })
+          : await signWithPopup(
+              {
+                redirectURL: location.origin + '/',
+                name: 'Freeminter',
+                challenge: `Claim a OAT\nNonce: ${Math.floor(
+                  Math.random() * 100001
+                )}`,
+                logo: location.origin + '/logo.svg',
+                address: auth.address,
+              },
+              {
+                timeoutInSeconds: 86400,
+              }
+            )
         if (sig.error) {
           toast({
             variant: 'destructive',
@@ -41,8 +48,14 @@ export function usePostAirdrops() {
           setIsLoading(false)
           return
         }
+        if (!auth) {
+          authState.set(sig.data as AuthResponseData)
+        }
         await api
-          .postAirdrops(auth.address, sig.data!)
+          .postAirdrops(
+            auth ? auth.address : (sig.data as AuthResponseData).address,
+            sig.data!
+          )
           .then(() => 'succeed' as const)
         await callback?.()
         toast({
