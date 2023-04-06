@@ -10,7 +10,7 @@ export const buttonVariants = cva(
         default:
           'bg-slate-900 text-white hover:bg-slate-700 dark:bg-slate-50 dark:text-slate-900',
         claim:
-          'bg-[#D2FF00] border-[#000] border-[1px] rounded-[16px] py-[15px] text-base font-bold leading-4',
+          'bg-[#333] text-[#fff] border-[#000] border-[1px] rounded-[16px] py-[15px] text-base font-bold leading-4',
         view_wallet:
           'bg-white border-[#000] border-[1px] rounded-[16px] py-[15px] text-base font-bold leading-4',
         finished:

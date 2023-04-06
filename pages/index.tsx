@@ -62,13 +62,13 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
       {isLoading || isPostingAirdrops ? (
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : null}
-      {
-        {
-          [EventStatus.Claimable]: 'Claim',
-          [EventStatus.Claimed]: 'View wallet',
-          [EventStatus.Finished]: 'Finished',
-        }[eventStatus]
-      }
+      {!auth
+        ? 'Connect Wallet'
+        : {
+            [EventStatus.Claimable]: 'Claim',
+            [EventStatus.Claimed]: 'View wallet',
+            [EventStatus.Finished]: 'Finished',
+          }[eventStatus]}
     </Button>
   )
 })
@@ -108,7 +108,7 @@ const Main = observer(() => {
         <p className="text-xs text-[#333] leading-[20px] text-center font-medium mt-[8px]">
           👉📅End time: {endTime}
         </p>
-        <div className="bg-[#f7f6f0] rounded-[24px] mt-[16px] overflow-hidden">
+        <div className="bg-[#F5F5F5] rounded-[24px] mt-[16px] overflow-hidden">
           <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden select-none pointer-events-none">
             <Image
               className="w-auto h-full relative z-10"
@@ -119,7 +119,7 @@ const Main = observer(() => {
               priority
             />
             <Image
-              className="w-[200%] h-[200%] absolute blur-3xl transform-gpu opacity-50 translate-y-[-30%]"
+              className="w-[200%] h-[200%] absolute blur-[25px] transform-gpu opacity-50 translate-y-[-30%]"
               src={NFTImage.src}
               width={NFTImage.width}
               height={NFTImage.height}
