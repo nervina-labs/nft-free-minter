@@ -96,7 +96,10 @@ const Main = observer(() => {
   }, [])
 
   return (
-    <div className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center pb-[48px]">
+    <div
+      className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center pb-[48px]"
+      style={{ opacity: isMounted ? undefined : 0 }}
+    >
       {isMounted ? <Header /> : null}
       <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col">
         <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
