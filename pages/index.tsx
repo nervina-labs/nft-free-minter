@@ -7,7 +7,7 @@ import { Loader2 } from 'lucide-react'
 import { usePostAirdrops } from '@/hooks/usePostAirdrops'
 import NFTImage from '@/assets/NFT_image.png'
 import Image from 'next/image'
-import { EVENT_END_TIME, JOYID_APP_URL } from '@/constants'
+import { EVENT_END_TIME, JOYID_APP_NFT_URL } from '@/constants'
 import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { api } from '@/api'
@@ -47,7 +47,7 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
       onClick={async () => {
         if (isLoading || eventStatus === EventStatus.Finished) return
         if (eventStatus === EventStatus.Claimed) {
-          window.open(JOYID_APP_URL)
+          window.open(JOYID_APP_NFT_URL)
         }
         if (eventStatus === EventStatus.Claimable) {
           if (!auth) {
