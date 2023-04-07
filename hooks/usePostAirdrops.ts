@@ -70,9 +70,12 @@ export function usePostAirdrops() {
         })
         setIsLoading(false)
       } catch (error) {
-        setIsLoading(false)
         if (error instanceof AxiosError) {
           const code: ErrorCode = error.response?.data?.code
+          if (code === ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED) {
+            await callback?.()
+            return
+          }
           toast({
             variant: 'destructive',
             title: '⚠️ Error',
@@ -97,6 +100,7 @@ export function usePostAirdrops() {
             description: (error as any)?.message || 'Unknown error',
           })
         }
+        setIsLoading(false)
         throw error
       }
     },
