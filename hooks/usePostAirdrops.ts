@@ -40,11 +40,18 @@ export function usePostAirdrops() {
               }
             )
         if (sig.error) {
-          toast({
-            variant: 'destructive',
-            title: '⚠️ Error',
-            description: sig.error,
-          })
+          if (!['Popup closed', 'User Rejected'].includes(sig.error)) {
+            toast({
+              variant: 'destructive',
+              title: '⚠️ Error',
+              description: sig.error,
+            })
+          } else if (sig.error === 'User Rejected') {
+            toast({
+              title: '⚠️ Cancel',
+              description: sig.error,
+            })
+          }
           setIsLoading(false)
           return
         }

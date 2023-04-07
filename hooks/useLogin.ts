@@ -32,11 +32,18 @@ export function useLogin() {
         authState.set(res.data)
         return res.data
       } else {
-        toast({
-          title: '⚠️ Error',
-          description: 'Wallet refused the action.',
-          variant: 'destructive',
-        })
+        if (!['Popup closed', 'User Rejected'].includes(res.error)) {
+          toast({
+            variant: 'destructive',
+            title: '⚠️ Error',
+            description: res.error,
+          })
+        } else if (res.error === 'User Rejected') {
+          toast({
+            title: '⚠️ Cancel',
+            description: res.error,
+          })
+        }
       }
     },
     [toast]
