@@ -12,7 +12,6 @@ import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { api } from '@/api'
 import { QueryKey } from '@/api/QueryKey'
-import { authState, useLogin } from '@/hooks/useLogin'
 import { isInWebview } from '@/lib/browser-env'
 import { WebviewGuide } from '@/components/WebviewGuide'
 
@@ -23,8 +22,6 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
     mutate,
   } = useEventStatus()
   const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
-  const auth = authState.get()
-  const login = useLogin()
   const refetch = async () => {
     await onClaim?.()
     await mutate()
@@ -57,13 +54,13 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
       {isLoading || isPostingAirdrops ? (
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : null}
-      {!auth
-        ? 'Connect Wallet'
-        : {
-            [EventStatus.Claimable]: 'Claim',
-            [EventStatus.Claimed]: 'View wallet',
-            [EventStatus.Finished]: 'Finished',
-          }[eventStatus]}
+      {
+        {
+          [EventStatus.Claimable]: 'Claim',
+          [EventStatus.Claimed]: 'View wallet',
+          [EventStatus.Finished]: 'Finished',
+        }[eventStatus]
+      }
     </Button>
   )
 })
