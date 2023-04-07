@@ -13,7 +13,7 @@ import {
 import { observer } from '@legendapp/state/react-components'
 import { authState, useLogin, useLogout } from '@/hooks/useLogin'
 import { cn, truncateMiddle } from '@/lib/utils'
-import { JOYID_APP_URL } from '@/constants'
+import { JOYID_APP_NFT_URL, JOYID_APP_URL } from '@/constants'
 
 export const Header = observer(() => {
   const login = useLogin()
@@ -38,7 +38,9 @@ export const Header = observer(() => {
             <DropdownMenuContent sideOffset={14}>
               <DropdownMenuItem
                 onClick={() => {
-                  window.open(JOYID_APP_URL)
+                  window.open(
+                    `${JOYID_APP_NFT_URL}&select_address=${auth?.address}`
+                  )
                 }}
               >
                 <CardCoinIconSVG className="mr-[8px]" />

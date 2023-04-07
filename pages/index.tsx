@@ -14,6 +14,7 @@ import { api } from '@/api'
 import { QueryKey } from '@/api/QueryKey'
 import { isInWebview } from '@/lib/browser-env'
 import { WebviewGuide } from '@/components/WebviewGuide'
+import { authState } from '@/hooks/useLogin'
 
 const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
   const {
@@ -22,6 +23,7 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
     mutate,
   } = useEventStatus()
   const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
+  const auth = authState.get()
   const refetch = async () => {
     await onClaim?.()
     await mutate()
@@ -44,7 +46,7 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
       onClick={async () => {
         if (isLoading || eventStatus === EventStatus.Finished) return
         if (eventStatus === EventStatus.Claimed) {
-          window.open(JOYID_APP_NFT_URL)
+          window.open(`${JOYID_APP_NFT_URL}&select_address=${auth?.address}`)
         }
         if (eventStatus === EventStatus.Claimable) {
           await postAirdrops(() => refetch()).catch(async () => refetch())
@@ -89,11 +91,11 @@ const Main = observer(() => {
 
   return (
     <div
-      className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center pb-[48px]"
+      className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center"
       style={{ opacity: isMounted ? undefined : 0 }}
     >
       {isMounted ? <Header /> : null}
-      <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col">
+      <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col pb-[48px]">
         <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
           Web3 Festival Attendency Proof 🎫
         </h1>
