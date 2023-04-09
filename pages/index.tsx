@@ -138,7 +138,8 @@ const Main = observer(() => {
           this badges, it might open some doors in the future 😉
         </p>
         <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
-          Claimed: {claimCount || '-'}
+          Claimed:{' '}
+          {claimCount == null || claimCount == undefined ? '-' : claimCount}
         </p>
         {isMounted ? <ClaimButton onClaim={refetchClaimCount} /> : null}
       </main>
