@@ -122,23 +122,24 @@ const Main = observer(() => {
           </div>
           <div className="pt-[8px] p-[16px] text-[#333]">
             <h3 className="font-medium text-[16px] leading-[20px]">
-              Ethereum Merge Stamps
+              Web3 Festival 2023 OAT
             </h3>
             <div className="flex justify-between font-normal text-xs leading-[14px] mt-[8px]">
-              <div>Joyid wallet</div>
+              <div>JoyID Wallet</div>
               <div>Unlimited</div>
             </div>
           </div>
         </div>
         <p className="font-normal text-xs leading-4 text-center mt-[32px]">
-          The inaugural Web3 Festival，co-hosted by Wangxiang Blockchain Labs
-          and HashKey Group and organized by W3ME, will take place on April
-          12-15 at 5/F,Hong Kong Conventionand Exhibition Center(HKCEC).This
-          four-day event, hosted on five center stages across an area of
-          about9,000m2,will see over 10,000 attendees.
+          Thank you for being the first to support and experience JoyID at Hong
+          Kong Web3 Festival 2023. JoyID, a passwordless Web3 wallet, is
+          designed to break down the barriers to the mass adoption, making it
+          truly easy-to-use and high security for all Web2 & Web3 users. Keep
+          this badges, it might open some doors in the future 😉
         </p>
         <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
-          Claimed: {claimCount || '-'}
+          Claimed:{' '}
+          {claimCount == null || claimCount == undefined ? '-' : claimCount}
         </p>
         {isMounted ? <ClaimButton onClaim={refetchClaimCount} /> : null}
       </main>
