@@ -1,12 +1,17 @@
 import axios, { Axios } from 'axios'
 import { HolderToken } from '@/api/models/HolderToken'
 import { AuthResponseData, SignMessageResponseData } from '@joyid/core'
+import { NFTBOX_PUBLIC_SERVER_URL } from '@/constants'
 
 export class API {
   private axios: Axios
+  private nftboxAxios: Axios
 
   constructor() {
     this.axios = axios.create()
+    this.nftboxAxios = axios.create({
+      baseURL: NFTBOX_PUBLIC_SERVER_URL,
+    })
   }
 
   postAirdrops(
@@ -20,7 +25,7 @@ export class API {
   }
 
   getHolderTokens(address: string) {
-    return this.axios.get<HolderToken>(`/api/holder_tokens`, {
+    return this.nftboxAxios.get<HolderToken>(`/holder_tokens`, {
       params: {
         address,
       },
@@ -28,7 +33,7 @@ export class API {
   }
 
   getClaimCount() {
-    return this.axios.get<{ claimed_count: number }>('/api/airdrops')
+    return this.nftboxAxios.get<{ claimed_count: number }>('/airdrops')
   }
 }
 
