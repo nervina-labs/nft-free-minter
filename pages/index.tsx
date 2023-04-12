@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import PlausibleProvider from 'next-plausible'
 import { Header } from '@/components/Header'
 import { Button, ButtonProps } from '@/components/ui/button'
 import { observer } from '@legendapp/state/react-components'
@@ -7,7 +8,7 @@ import { Loader2 } from 'lucide-react'
 import { usePostAirdrops } from '@/hooks/usePostAirdrops'
 import NFTImage from '@/assets/NFT_image.png'
 import Image from 'next/image'
-import { EVENT_END_TIME, JOYID_APP_NFT_URL } from '@/constants'
+import { DOMAIN, EVENT_END_TIME, JOYID_APP_NFT_URL } from '@/constants'
 import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { api } from '@/api'
@@ -162,7 +163,9 @@ export default function Home() {
         />
         <link rel="icon" href="/logo.svg" />
       </Head>
-      {isCurrentInWebview ? <WebviewGuide /> : <Main />}
+      <PlausibleProvider domain={DOMAIN} enabled>
+        {isCurrentInWebview ? <WebviewGuide /> : <Main />}
+      </PlausibleProvider>
     </>
   )
 }
