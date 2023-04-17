@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { config } from '@joyid/core'
 import { JOYID_APP_URL } from '@/constants'
 import { ResizeObserver as ResizeObserverPolyfill } from '@juggle/resize-observer'
+import { useEffect } from 'react'
 
 const polyfill = () => {
   if ('ResizeObserver' in window === false) {
@@ -14,8 +15,6 @@ const polyfill = () => {
     window.ResizeObserver = ResizeObserverPolyfill
   }
 }
-
-polyfill()
 
 const SpaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -29,6 +28,9 @@ configureObservablePersistence({
 config.setJoyIDAppURL(JOYID_APP_URL)
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    polyfill()
+  }, [])
   return (
     <>
       <style jsx global>{`
