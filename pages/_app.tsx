@@ -6,6 +6,16 @@ import { ObservablePersistLocalStorage } from '@legendapp/state/persist-plugins/
 import { Toaster } from '@/components/ui/toaster'
 import { config } from '@joyid/core'
 import { JOYID_APP_URL } from '@/constants'
+import { ResizeObserver as ResizeObserverPolyfill } from '@juggle/resize-observer'
+
+const polyfill = () => {
+  if ('ResizeObserver' in window === false) {
+    // Loads polyfill asynchronously, only if required.
+    window.ResizeObserver = ResizeObserverPolyfill
+  }
+}
+
+polyfill()
 
 const SpaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
