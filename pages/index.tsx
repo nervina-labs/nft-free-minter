@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import PlausibleProvider from 'next-plausible'
 import { Header } from '@/components/Header'
 import { Button, ButtonProps } from '@/components/ui/button'
 import { observer } from '@legendapp/state/react-components'
@@ -7,13 +8,14 @@ import { Loader2 } from 'lucide-react'
 import { usePostAirdrops } from '@/hooks/usePostAirdrops'
 import NFTImage from '@/assets/NFT_image.png'
 import Image from 'next/image'
-import { EVENT_END_TIME, JOYID_APP_NFT_URL } from '@/constants'
+import { DOMAIN, EVENT_END_TIME, JOYID_APP_NFT_URL } from '@/constants'
 import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { api } from '@/api'
 import { QueryKey } from '@/api/QueryKey'
 import { isInWebview } from '@/lib/browser-env'
 import { WebviewGuide } from '@/components/WebviewGuide'
+import { authState } from '@/hooks/useLogin'
 
 const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
   const {
@@ -22,6 +24,7 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
     mutate,
   } = useEventStatus()
   const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
+  const auth = authState.get()
   const refetch = async () => {
     await onClaim?.()
     await mutate()
@@ -44,7 +47,7 @@ const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
       onClick={async () => {
         if (isLoading || eventStatus === EventStatus.Finished) return
         if (eventStatus === EventStatus.Claimed) {
-          window.open(JOYID_APP_NFT_URL)
+          window.open(`${JOYID_APP_NFT_URL}&select_address=${auth?.address}`)
         }
         if (eventStatus === EventStatus.Claimable) {
           await postAirdrops(() => refetch()).catch(async () => refetch())
@@ -89,11 +92,11 @@ const Main = observer(() => {
 
   return (
     <div
-      className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center pb-[48px]"
+      className="bg-[#fafafa] min-h-screen flex flex-col justify-start items-center"
       style={{ opacity: isMounted ? undefined : 0 }}
     >
       {isMounted ? <Header /> : null}
-      <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col">
+      <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col pb-[48px]">
         <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
           Web3 Festival Attendency Proof 🎫
         </h1>
@@ -122,23 +125,24 @@ const Main = observer(() => {
           </div>
           <div className="pt-[8px] p-[16px] text-[#333]">
             <h3 className="font-medium text-[16px] leading-[20px]">
-              Ethereum Merge Stamps
+              Web3 Festival 2023 OAT
             </h3>
             <div className="flex justify-between font-normal text-xs leading-[14px] mt-[8px]">
-              <div>Joyid wallet</div>
+              <div>JoyID Wallet</div>
               <div>Unlimited</div>
             </div>
           </div>
         </div>
         <p className="font-normal text-xs leading-4 text-center mt-[32px]">
-          The inaugural Web3 Festival，co-hosted by Wangxiang Blockchain Labs
-          and HashKey Group and organized by W3ME, will take place on April
-          12-15 at 5/F,Hong Kong Conventionand Exhibition Center(HKCEC).This
-          four-day event, hosted on five center stages across an area of
-          about9,000m2,will see over 10,000 attendees.
+          Thank you for being the first to support and experience JoyID at Hong
+          Kong Web3 Festival 2023. JoyID, a passwordless Web3 wallet, is
+          designed to break down the barriers to the mass adoption, making it
+          truly easy-to-use and high security for all Web2 & Web3 users. Keep
+          this badges, it might open some doors in the future 😉
         </p>
         <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
-          Claimed: {claimCount || '-'}
+          Claimed:{' '}
+          {claimCount == null || claimCount == undefined ? '-' : claimCount}
         </p>
         {isMounted ? <ClaimButton onClaim={refetchClaimCount} /> : null}
       </main>
@@ -161,7 +165,9 @@ export default function Home() {
         />
         <link rel="icon" href="/logo.svg" />
       </Head>
-      {isCurrentInWebview ? <WebviewGuide /> : <Main />}
+      <PlausibleProvider domain={DOMAIN} enabled>
+        {isCurrentInWebview ? <WebviewGuide /> : <Main />}
+      </PlausibleProvider>
     </>
   )
 }

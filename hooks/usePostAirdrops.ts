@@ -73,6 +73,10 @@ export function usePostAirdrops() {
         setIsLoading(false)
         if (error instanceof AxiosError) {
           const code: ErrorCode = error.response?.data?.code
+          if (code === ErrorCode.ADDRESS_HAS_ALREADY_CLAIMED) {
+            await callback?.()
+            return
+          }
           toast({
             variant: 'destructive',
             title: '⚠️ Error',
