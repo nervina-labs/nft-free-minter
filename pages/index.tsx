@@ -97,9 +97,11 @@ const Main = observer(() => {
         <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
           Web3 Festival Attendency Proof 🎫
         </h1>
-        <p className="text-xs text-[#333] leading-[20px] text-center font-medium mt-[8px]">
-          👉📅End time: {endTime}
-        </p>
+        {endTime ? (
+          <p className="text-xs text-[#333] leading-[20px] text-center font-medium mt-[8px]">
+            👉📅End time: {endTime}
+          </p>
+        ) : null}
         <div className="bg-[#F5F5F5] rounded-[24px] mt-[16px] overflow-hidden">
           <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden select-none pointer-events-none">
             <Image
