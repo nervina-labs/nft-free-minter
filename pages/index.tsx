@@ -98,7 +98,7 @@ const Main = observer(() => {
       {isMounted ? <Header /> : null}
       <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col pb-[48px]">
         <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
-          Web3 Festival Attendency Proof 🎫
+          JoyID Boarding Pass
         </h1>
         {endTime ? (
           <p className="text-xs text-[#333] leading-[20px] text-center font-medium mt-[8px]">
@@ -125,20 +125,17 @@ const Main = observer(() => {
           </div>
           <div className="pt-[8px] p-[16px] text-[#333]">
             <h3 className="font-medium text-[16px] leading-[20px]">
-              Web3 Festival 2023 OAT
+              JoyID Boarding Pass
             </h3>
             <div className="flex justify-between font-normal text-xs leading-[14px] mt-[8px]">
               <div>JoyID Wallet</div>
-              <div>Unlimited</div>
+              <div>limited 1k</div>
             </div>
           </div>
         </div>
         <p className="font-normal text-xs leading-4 text-center mt-[32px]">
-          Thank you for being the first to support and experience JoyID at Hong
-          Kong Web3 Festival 2023. JoyID, a passwordless Web3 wallet, is
-          designed to break down the barriers to the mass adoption, making it
-          truly easy-to-use and high security for all Web2 & Web3 users. Keep
-          this badges, it might open some doors in the future 😉
+          Welcome to passwordless future！One-click onboarding using biometrics.
+          No mnemonics, No password, Non-custodial
         </p>
         <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
           Claimed:{' '}
