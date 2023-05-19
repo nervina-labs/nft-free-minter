@@ -10,7 +10,7 @@ export const authState = observable<NonNullable<AuthResponse['data']> | null>(
 
 persistObservable(authState, {
   local: {
-    name: 'auth1.0',
+    name: 'auth1.1',
   },
 })
 
