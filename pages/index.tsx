@@ -129,7 +129,7 @@ const Main = observer(() => {
             </h3>
             <div className="flex justify-between font-normal text-xs leading-[14px] mt-[8px]">
               <div>limited 100</div>
-              <div>Unlimited</div>
+              {/* <div>Unlimited</div> */}
             </div>
           </div>
         </div>
