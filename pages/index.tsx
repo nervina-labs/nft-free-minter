@@ -98,7 +98,7 @@ const Main = observer(() => {
       {isMounted ? <Header /> : null}
       <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col pb-[48px]">
         <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
-          永續生活 ESG 紀念章
+          Inaugural project showcase
         </h1>
         {endTime ? (
           <p className="text-xs text-[#333] leading-[20px] text-center font-medium mt-[8px]">
@@ -125,10 +125,10 @@ const Main = observer(() => {
           </div>
           <div className="pt-[8px] p-[16px] text-[#333]">
             <h3 className="font-medium text-[16px] leading-[20px]">
-              永續生活 ESG 紀念章
+              Inaugural project showcase
             </h3>
             <div className="flex justify-between font-normal text-xs leading-[14px] mt-[8px]">
-              <div>limited 500</div>
+              <div>limited 50</div>
             </div>
           </div>
         </div>
