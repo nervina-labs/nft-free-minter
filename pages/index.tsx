@@ -39,6 +39,30 @@ export const getServerSideProps: GetServerSideProps<{
   return { props: { nftInfo } }
 }
 
+function isSupportedFileName(str: string): boolean {
+  const imageExtensions = ['jpg', 'jpeg', 'png', 'webp']
+  const pattern = new RegExp(`(${imageExtensions.join('|')})$`, 'i')
+  return pattern.test(str)
+}
+
+const getNftThumbnail = (image: string) => {
+  if (!isSupportedFileName(image)) {
+    return image
+  }
+  try {
+    const imgUrl = new URL(image)
+    if ('images.nftbox.me' === imgUrl.host) {
+      const pathname = imgUrl.pathname.split('/')
+      pathname.splice(2, 0, '200x200')
+      imgUrl.pathname = pathname.join('/')
+      return imgUrl.toString()
+    }
+    return imgUrl.toString()
+  } catch (error) {
+    return image
+  }
+}
+
 const ClaimButton = observer<{ onClaim?: () => void; nftInfo: NftInfo }>(
   ({ onClaim, nftInfo }) => {
     const {
@@ -133,12 +157,12 @@ const Main = observer(({ nftInfo }: { nftInfo: NftInfo }) => {
           <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden select-none pointer-events-none">
             <img
               className="w-auto h-full relative z-10"
-              src={nftInfo.bg_image_url}
+              src={getNftThumbnail(nftInfo.bg_image_url)}
               alt="NFT"
             />
             <img
               className="w-[200%] h-[200%] absolute blur-[25px] transform-gpu opacity-50 translate-y-[-30%]"
-              src={nftInfo.bg_image_url}
+              src={getNftThumbnail(nftInfo.bg_image_url)}
               alt="NFT_background"
             />
           </div>
