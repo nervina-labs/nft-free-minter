@@ -146,7 +146,7 @@ const Main = observer(({ nftInfo }: { nftInfo: NftInfo }) => {
               <div>
                 {nftInfo.total === '0'
                   ? 'Unlimited'
-                  : `limited ${nftInfo.total}`}
+                  : `Limited ${nftInfo.total}`}
               </div>
             </div>
           </div>
