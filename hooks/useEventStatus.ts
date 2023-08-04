@@ -2,8 +2,8 @@ import { authState } from '@/hooks/useLogin'
 import useSWR from 'swr'
 import { QueryKey } from '@/api/QueryKey'
 import { api } from '@/api'
-import { EVENT_END_TIME, EVENT_TOKEN_UUID } from '@/constants'
 import { useSelector } from '@legendapp/state/react'
+import dayjs from 'dayjs'
 
 export enum EventStatus {
   Claimable = 'Claimable',
@@ -11,14 +11,14 @@ export enum EventStatus {
   Finished = 'Finished',
 }
 
-export function useEventStatus() {
+export function useEventStatus(classID: string, endTime: number) {
   const auth = useSelector(() => authState.get())
   return useSWR<EventStatus>(
-    [QueryKey.GetHolderTokens, auth?.address],
+    [QueryKey.GetHolderTokens, classID, auth?.address],
     async () => {
       if (
-        EVENT_END_TIME != null &&
-        new Date().getTime() > new Date(EVENT_END_TIME).getTime()
+        endTime !== 0 &&
+        new Date().getTime() > dayjs.unix(endTime).toDate().getTime()
       ) {
         return EventStatus.Finished
       }
@@ -26,9 +26,7 @@ export function useEventStatus() {
         return EventStatus.Claimable
       }
       const res = await api.getHolderTokens(auth?.address)
-      const token = res.data.token_list.find(
-        (t) => t.class_uuid === EVENT_TOKEN_UUID
-      )
+      const token = res.data.token_list.find((t) => t.class_uuid === classID)
       if (token) return EventStatus.Claimed
       return EventStatus.Claimable
     }

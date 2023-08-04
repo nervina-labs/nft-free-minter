@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
 import PlausibleProvider from 'next-plausible'
 import { Header } from '@/components/Header'
@@ -6,9 +7,7 @@ import { observer } from '@legendapp/state/react-components'
 import { EventStatus, useEventStatus } from '@/hooks/useEventStatus'
 import { Loader2 } from 'lucide-react'
 import { usePostAirdrops } from '@/hooks/usePostAirdrops'
-import NFTImage from '@/assets/NFT_image.png'
-import Image from 'next/image'
-import { DOMAIN, EVENT_END_TIME, JOYID_APP_NFT_URL } from '@/constants'
+import { DOMAIN, JOYID_APP_NFT_URL, NFTBOX_SERVER_URL } from '@/constants'
 import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { api } from '@/api'
@@ -16,68 +15,89 @@ import { QueryKey } from '@/api/QueryKey'
 import { isInWebview } from '@/lib/browser-env'
 import { WebviewGuide } from '@/components/WebviewGuide'
 import { authState } from '@/hooks/useLogin'
+import dayjs from 'dayjs'
+import type { GetServerSideProps } from 'next'
 
-const ClaimButton = observer<{ onClaim?: () => void }>(({ onClaim }) => {
-  const {
-    data: eventStatus = EventStatus.Claimable,
-    isLoading,
-    mutate,
-  } = useEventStatus()
-  const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
-  const auth = authState.get()
-  const refetch = async () => {
-    await onClaim?.()
-    await mutate()
-  }
-  return (
-    <Button
-      variant={
-        (
-          {
-            [EventStatus.Claimable]: 'claim',
-            [EventStatus.Claimed]: 'view_wallet',
-            [EventStatus.Finished]: 'finished',
-          } as unknown as { [key in EventStatus]: ButtonProps['variant'] }
-        )[eventStatus]
-      }
-      className="mt-[12px]"
-      disabled={
-        isLoading || eventStatus === EventStatus.Finished || isPostingAirdrops
-      }
-      onClick={async () => {
-        if (isLoading || eventStatus === EventStatus.Finished) return
-        if (eventStatus === EventStatus.Claimed) {
-          window.open(`${JOYID_APP_NFT_URL}&select_address=${auth?.address}`)
+interface NftInfo {
+  bg_image_url: string
+  class_name: string
+  description: string
+  total: string | number
+  ended_at: number
+  class_uuid: string
+}
+
+export const getServerSideProps: GetServerSideProps<{
+  nftInfo: NftInfo
+}> = async () => {
+  const res = await fetch(`${NFTBOX_SERVER_URL}/airdrop_events`)
+  const nftInfo = await res.json()
+  return { props: { nftInfo } }
+}
+
+const ClaimButton = observer<{ onClaim?: () => void; nftInfo: NftInfo }>(
+  ({ onClaim, nftInfo }) => {
+    const {
+      data: eventStatus = EventStatus.Claimable,
+      isLoading,
+      mutate,
+    } = useEventStatus(nftInfo.class_uuid, nftInfo.ended_at)
+    const { postAirdrops, isLoading: isPostingAirdrops } = usePostAirdrops()
+    const auth = authState.get()
+    const refetch = async () => {
+      await onClaim?.()
+      await mutate()
+    }
+    return (
+      <Button
+        variant={
+          (
+            {
+              [EventStatus.Claimable]: 'claim',
+              [EventStatus.Claimed]: 'view_wallet',
+              [EventStatus.Finished]: 'finished',
+            } as unknown as { [key in EventStatus]: ButtonProps['variant'] }
+          )[eventStatus]
         }
-        if (eventStatus === EventStatus.Claimable) {
-          await postAirdrops(() => refetch()).catch(async () => refetch())
+        className="mt-[12px]"
+        disabled={
+          isLoading || eventStatus === EventStatus.Finished || isPostingAirdrops
         }
-      }}
-    >
-      {isLoading || isPostingAirdrops ? (
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-      ) : null}
-      {
+        onClick={async () => {
+          if (isLoading || eventStatus === EventStatus.Finished) return
+          if (eventStatus === EventStatus.Claimed) {
+            window.open(`${JOYID_APP_NFT_URL}&select_address=${auth?.address}`)
+          }
+          if (eventStatus === EventStatus.Claimable) {
+            await postAirdrops(() => refetch()).catch(async () => refetch())
+          }
+        }}
+      >
+        {isLoading || isPostingAirdrops ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : null}
         {
-          [EventStatus.Claimable]: 'Claim',
-          [EventStatus.Claimed]: 'View wallet',
-          [EventStatus.Finished]: 'Finished',
-        }[eventStatus]
-      }
-    </Button>
-  )
-})
+          {
+            [EventStatus.Claimable]: 'Claim',
+            [EventStatus.Claimed]: 'View wallet',
+            [EventStatus.Finished]: 'Finished',
+          }[eventStatus]
+        }
+      </Button>
+    )
+  }
+)
 
-const Main = observer(() => {
+const Main = observer(({ nftInfo }: { nftInfo: NftInfo }) => {
   const endTime = useMemo(() => {
-    if (!EVENT_END_TIME) return null
-    const date = new Date(EVENT_END_TIME)
+    if (nftInfo.ended_at === 0) return null
+    const date = dayjs.unix(nftInfo.ended_at).toDate()
     const hours = date.getHours()
     const minutes = date.getMinutes()
     return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ⏳${
       hours <= 9 ? '0' + hours : hours
     }:${minutes <= 9 ? '0' + hours : hours} GMT +08:00🕗`
-  }, [])
+  }, [nftInfo])
   const { data: claimCount, mutate: refetchClaimCount } = useSWR(
     [QueryKey.GetClaimCount],
     async () => api.getClaimCount().then((res) => res.data.claimed_count),
@@ -98,7 +118,7 @@ const Main = observer(() => {
       {isMounted ? <Header /> : null}
       <main className="w-full mt-[68px] h-full xs:h-auto xs:max-w-[480px] xs:mt-[100px] bg-white pt-[48px] pb-[32px] px-[32px] xs:rounded-[32px] xs:drop-shadow-md flex flex-col pb-[48px]">
         <h1 className="text-[16px] text-[#FC6621] leading-[20px] font-bold text-center">
-          Inaugural project showcase
+          {nftInfo.class_name}
         </h1>
         {endTime ? (
           <p className="text-xs text-[#333] leading-[20px] text-center font-medium mt-[8px]">
@@ -107,28 +127,27 @@ const Main = observer(() => {
         ) : null}
         <div className="bg-[#F5F5F5] rounded-[24px] mt-[16px] overflow-hidden">
           <div className="w-full h-[220px] py-[30px] flex justify-center relative overflow-hidden select-none pointer-events-none">
-            <Image
+            <img
               className="w-auto h-full relative z-10"
-              src={NFTImage.src}
-              width={NFTImage.width}
-              height={NFTImage.height}
+              src={nftInfo.bg_image_url}
               alt="NFT"
-              priority
             />
-            <Image
+            <img
               className="w-[200%] h-[200%] absolute blur-[25px] transform-gpu opacity-50 translate-y-[-30%]"
-              src={NFTImage.src}
-              width={NFTImage.width}
-              height={NFTImage.height}
+              src={nftInfo.bg_image_url}
               alt="NFT_background"
             />
           </div>
           <div className="pt-[8px] p-[16px] text-[#333]">
             <h3 className="font-medium text-[16px] leading-[20px]">
-              Inaugural project showcase
+              {nftInfo.class_name}
             </h3>
             <div className="flex justify-between font-normal text-xs leading-[14px] mt-[8px]">
-              <div>limited 50</div>
+              <div>
+                {nftInfo.total === '0'
+                  ? 'Unlimited'
+                  : `limited ${nftInfo.total}`}
+              </div>
             </div>
           </div>
         </div>
@@ -140,13 +159,15 @@ const Main = observer(() => {
           Claimed:{' '}
           {claimCount == null || claimCount == undefined ? '-' : claimCount}
         </p>
-        {isMounted ? <ClaimButton onClaim={refetchClaimCount} /> : null}
+        {isMounted ? (
+          <ClaimButton onClaim={refetchClaimCount} nftInfo={nftInfo} />
+        ) : null}
       </main>
     </div>
   )
 })
 
-export default function Home() {
+export default function Home(props: { nftInfo: NftInfo }) {
   const [isCurrentInWebview, setIsCurrentIsWebview] = useState(false)
   useEffect(() => {
     setIsCurrentIsWebview(isInWebview())
@@ -162,7 +183,11 @@ export default function Home() {
         <link rel="icon" href="/logo.svg" />
       </Head>
       <PlausibleProvider domain={DOMAIN} enabled>
-        {isCurrentInWebview ? <WebviewGuide /> : <Main />}
+        {isCurrentInWebview ? (
+          <WebviewGuide />
+        ) : (
+          <Main nftInfo={props.nftInfo} />
+        )}
       </PlausibleProvider>
     </>
   )
