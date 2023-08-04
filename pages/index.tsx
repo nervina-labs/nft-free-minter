@@ -29,9 +29,13 @@ interface NftInfo {
 
 export const getServerSideProps: GetServerSideProps<{
   nftInfo: NftInfo
-}> = async () => {
-  const res = await fetch(`${NFTBOX_SERVER_URL}/airdrop_events`)
-  const nftInfo = await res.json()
+}> = async ({ res }) => {
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=10, stale-while-revalidate=59'
+  )
+  const data = await fetch(`${NFTBOX_SERVER_URL}/airdrop_events`)
+  const nftInfo = await data.json()
   return { props: { nftInfo } }
 }
 
