@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@joyid/core':
-    specifier: 0.2.0-beta.1
-    version: 0.2.0-beta.1
+    specifier: 0.2.0-beta.4
+    version: 0.2.0-beta.4
   '@legendapp/state':
     specifier: ^0.23.4
     version: 0.23.4(react@18.2.0)
@@ -1411,8 +1411,8 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==, tarball: https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz}
     dev: true
 
-  /@joyid/core@0.2.0-beta.1:
-    resolution: {integrity: sha512-rvN3QKqExHDEvX690Y7ouI8k/OqryO8QKngw3YYpTqwK/i0lCrelhylbEosWopm4xaZEO9m/+KD+AgRrZFEm/Q==}
+  /@joyid/core@0.2.0-beta.4:
+    resolution: {integrity: sha512-XO0Osd/9VQR6JXozeT0gfPqBf9m0Uv1ysFxXpgrpexTrplSSRq91JOy56tVFbGl0iH1GBnTmkrymJZis+cEznQ==}
     dependencies:
       cross-fetch: 3.1.8
     transitivePeerDependencies:

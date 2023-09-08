@@ -18,30 +18,31 @@ export function useLogin() {
   const { toast } = useToast()
   return useCallback(
     async (nonce: number = Math.floor(Math.random() * 10)) => {
-      const res = await authWithPopup(
-        {
-          redirectURL: location.origin + '/',
-          name: 'FreeMinter',
-          logo: location.origin + '/logo.svg',
-        },
-        {
-          timeoutInSeconds: 86400,
-        }
-      )
-      if (res.error == null) {
-        authState.set(res.data)
-        return res.data
-      } else {
-        if (!['Popup closed', 'User Rejected'].includes(res.error)) {
+      try {
+        const res = await authWithPopup(
+          {
+            redirectURL: location.origin + '/',
+            name: 'FreeMinter',
+            logo: location.origin + '/logo.svg',
+          },
+          {
+            timeoutInSeconds: 86400,
+          }
+        )
+        authState.set(res)
+        return res
+      } catch (error) {
+        const errMsg = (error as Error).message
+        if (!['Popup closed', 'User Rejected'].includes(errMsg)) {
           toast({
             variant: 'destructive',
             title: '⚠️ Error',
-            description: res.error,
+            description: errMsg,
           })
-        } else if (res.error === 'User Rejected') {
+        } else if (errMsg === 'User Rejected') {
           toast({
             title: '⚠️ Cancel',
-            description: res.error,
+            description: errMsg,
           })
         }
       }
