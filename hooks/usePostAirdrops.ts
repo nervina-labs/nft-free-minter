@@ -5,7 +5,11 @@ import { AxiosError } from 'axios'
 import { useToast } from '@/hooks/useToast'
 import { ErrorCode } from '@/api/ErrorCode'
 import { useSelector } from '@legendapp/state/react'
-import { AuthResponseData, authWithPopup, signWithPopup } from '@joyid/core'
+import {
+  AuthResponseData,
+  authWithPopup,
+  signMessageWithPopup,
+} from '@joyid/core'
 
 export function usePostAirdrops() {
   const auth = useSelector(() => authState.get())
@@ -25,7 +29,7 @@ export function usePostAirdrops() {
               )}`,
               logo: location.origin + '/logo.svg',
             })
-          : await signWithPopup(
+          : await signMessageWithPopup(
               {
                 redirectURL: location.origin + '/',
                 name: 'Freeminter',
