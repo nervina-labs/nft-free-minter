@@ -202,7 +202,7 @@ export default function Home(props: { nftInfo: NftInfo }) {
   return (
     <>
       <Head>
-        <title>Freeminter</title>
+        <title>Freeminter NFT</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1"
