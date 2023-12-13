@@ -4,7 +4,7 @@ import { Space_Grotesk } from 'next/font/google'
 import { configureObservablePersistence } from '@legendapp/state/persist'
 import { ObservablePersistLocalStorage } from '@legendapp/state/persist-plugins/local-storage'
 import { Toaster } from '@/components/ui/toaster'
-import { config } from '@joyid/core'
+import { initConfig } from '@joyid/core'
 import { JOYID_APP_URL } from '@/constants'
 
 const SpaceGrotesk = Space_Grotesk({
@@ -16,7 +16,9 @@ configureObservablePersistence({
   persistLocal: ObservablePersistLocalStorage,
 })
 
-config.setJoyIDAppURL(JOYID_APP_URL)
+initConfig({
+  joyidAppURL: JOYID_APP_URL,
+})
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

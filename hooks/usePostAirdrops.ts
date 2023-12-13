@@ -5,7 +5,11 @@ import { AxiosError } from 'axios'
 import { useToast } from '@/hooks/useToast'
 import { ErrorCode } from '@/api/ErrorCode'
 import { useSelector } from '@legendapp/state/react'
-import { AuthResponseData, authWithPopup, signWithPopup } from '@joyid/core'
+import {
+  AuthResponseData,
+  authWithPopup,
+  signMessageWithPopup,
+} from '@joyid/core'
 
 export function usePostAirdrops() {
   const auth = useSelector(() => authState.get())
@@ -25,7 +29,7 @@ export function usePostAirdrops() {
               )}`,
               logo: location.origin + '/logo.svg',
             })
-          : await signWithPopup(
+          : await signMessageWithPopup(
               {
                 redirectURL: location.origin + '/',
                 name: 'Freeminter',
@@ -39,29 +43,13 @@ export function usePostAirdrops() {
                 timeoutInSeconds: 86400,
               }
             )
-        if (sig.error) {
-          if (!['Popup closed', 'User Rejected'].includes(sig.error)) {
-            toast({
-              variant: 'destructive',
-              title: '⚠️ Error',
-              description: sig.error,
-            })
-          } else if (sig.error === 'User Rejected') {
-            toast({
-              title: '⚠️ Cancel',
-              description: sig.error,
-            })
-          }
-          setIsLoading(false)
-          return
-        }
         if (!auth) {
-          authState.set(sig.data as AuthResponseData)
+          authState.set(sig as AuthResponseData)
         }
         await api
           .postAirdrops(
-            auth ? auth.address : (sig.data as AuthResponseData).address,
-            sig.data!
+            auth ? auth.address : (sig as AuthResponseData).address,
+            sig
           )
           .then(() => 'succeed' as const)
         await callback?.()

@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios'
 import { NFTBOX_ACCESS_TOKEN, NFTBOX_SERVER_URL } from '@/constants'
 import {
   SignMessageResponseData,
-  verifyCredential,
+  // verifyCredential,
   verifySignature,
 } from '@joyid/core'
 import { ErrorCode } from '@/api/ErrorCode'
@@ -16,24 +16,24 @@ async function postHandler(req: NextApiRequest, res: NextApiResponse) {
   const { address, ...signedData } = req.body as SignMessageResponseData & {
     address: string
   }
-  try {
-    const isValid = await verifyCredential(
-      signedData.pubkey,
-      address,
-      signedData.keyType,
-      signedData.alg
-    )
-    if (!isValid) {
-      res.status(401).json({ code: ErrorCode.INVALID_CREDENTIAL })
-      return
-    }
-  } catch (error: any) {
-    res.status(500).json({
-      code: ErrorCode.UNKNOWN_ERROR,
-      message: error?.message,
-    })
-    return
-  }
+  // try {
+  //   const isValid = await verifyCredential(
+  //     signedData.pubkey,
+  //     address,
+  //     signedData.keyType,
+  //     signedData.alg
+  //   )
+  //   if (!isValid) {
+  //     res.status(401).json({ code: ErrorCode.INVALID_CREDENTIAL })
+  //     return
+  //   }
+  // } catch (error: any) {
+  //   res.status(500).json({
+  //     code: ErrorCode.UNKNOWN_ERROR,
+  //     message: error?.message,
+  //   })
+  //   return
+  // }
 
   try {
     const isValid = await verifySignature(signedData)
