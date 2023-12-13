@@ -180,8 +180,7 @@ const Main = observer(({ nftInfo }: { nftInfo: NftInfo }) => {
           </div>
         </div>
         <p className="font-normal text-xs leading-4 text-center mt-[32px]">
-          Welcome to passwordless future！One-click onboarding using biometrics.
-          No mnemonics, No password, Non-custodial
+          {nftInfo.description}
         </p>
         <p className="font-bold text-xs leading-4 text-center text-[#3D45FB] w-full mt-[32px] mx-auto">
           Claimed:{' '}
