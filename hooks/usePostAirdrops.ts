@@ -80,7 +80,9 @@ export function usePostAirdrops() {
                 [ErrorCode.UNKNOWN_ERROR]: '',
                 [ErrorCode.INVALID_SIGNATURE]:
                   'Invalid signature, please try again',
-              }[code] || 'Unknown error',
+              }[code] ||
+              error.response?.data?.message ||
+              error.message,
           })
         } else {
           toast({
